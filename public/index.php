@@ -1,3 +1,3 @@
 <?php
-echo "Connected";
+echo "Logged Out";
 ?>
