@@ -10,13 +10,13 @@ try {
     $userStmt = $pdo->query("SELECT COUNT(*) as total FROM user WHERE is_admin = 0");
     $totalUsers = $userStmt->fetch()['total'];
     
-    // Active tickets
-    $activeStmt = $pdo->query("SELECT COUNT(*) as total FROM ticket WHERE status = 'booked'");
-    $activeTickets = $activeStmt->fetch()['total'];
+    // Active tickets - Count the total seat_count for all booked tickets
+    $activeStmt = $pdo->query("SELECT SUM(seat_count) as total FROM ticket WHERE status = 'booked' OR status IS NULL");
+    $activeTickets = $activeStmt->fetch()['total'] ?? 0;
     
-    // Cancelled tickets
-    $cancelledStmt = $pdo->query("SELECT COUNT(*) as total FROM ticket WHERE status = 'cancelled'");
-    $cancelledTickets = $cancelledStmt->fetch()['total'];
+    // Cancelled tickets - Count the total seat_count for all cancelled tickets
+    $cancelledStmt = $pdo->query("SELECT SUM(seat_count) as total FROM ticket WHERE status = 'cancelled'");
+    $cancelledTickets = $cancelledStmt->fetch()['total'] ?? 0;
     
 } catch (PDOException $e) {
     die("Database error: " . $e->getMessage());
