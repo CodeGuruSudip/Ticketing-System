@@ -4,19 +4,15 @@ require_once('../../includes/config.php');
 require_once('../../includes/functions.php');
 requireAdmin();
 
-// Handle user actions (delete, update status)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         if ($_POST['action'] === 'delete' && isset($_POST['user_id'])) {
-            // Check if confirmation is needed
             if (!isset($_POST['confirm'])) {
-                // Store the user_id in session for confirmation
                 $_SESSION['delete_user_id'] = $_POST['user_id'];
                 $_SESSION['delete_confirmation'] = true;
                 header('Location: users.php');
                 exit;
             } else {
-                // Confirmation received, proceed with deletion
                 try {
                     $stmt = $pdo->prepare("DELETE FROM user WHERE user_id = ? AND is_admin = 0");
                     $stmt->execute([$_POST['user_id']]);
@@ -29,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         
-        // Cancel deletion
         if ($_POST['action'] === 'cancel_delete') {
             unset($_SESSION['delete_user_id']);
             unset($_SESSION['delete_confirmation']);
@@ -39,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// Search functionality
 $searchQuery = '';
 $whereClause = '';
 $params = [];
@@ -50,7 +44,6 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
     $params[] = "%$searchQuery%";
 }
 
-// Fetch users with search filter if provided
 try {
     $query = "
         SELECT user_id, email, created_at, is_admin
@@ -297,7 +290,6 @@ try {
             <?php endif; ?>
             
             <?php if (isset($_SESSION['delete_confirmation']) && isset($_SESSION['delete_user_id'])): 
-                // Get user details for confirmation message
                 $userStmt = $pdo->prepare("SELECT email FROM user WHERE user_id = ?");
                 $userStmt->execute([$_SESSION['delete_user_id']]);
                 $userToDelete = $userStmt->fetch();
