@@ -4,7 +4,6 @@ require_once('../includes/config.php');
 require_once('../includes/functions.php');
 requireLogin();
 
-// Fetch all tickets for the current user
 try {
     $stmt = $pdo->prepare("
         SELECT ticket_id, seat_count, booking_time, status
@@ -34,7 +33,6 @@ try {
         
         echo "</table>";
         
-        // Count tickets by status
         $booked = 0;
         $cancelled = 0;
         $other = 0;
