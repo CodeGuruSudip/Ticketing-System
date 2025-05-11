@@ -1,14 +1,11 @@
 <?php
-// Start session and error reporting
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Include config and optional helper functions
-require_once('../includes/config.php'); // DB connection
-require_once('../includes/functions.php'); // for getFlash(), setFlash()
+require_once('../includes/config.php'); 
+require_once('../includes/functions.php'); 
 
-// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = $_POST['username'] ?? '';
     $email = $_POST['email'] ?? '';
@@ -17,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($username) || empty($email) || empty($password)) {
         setFlash('error', 'All fields are required.');
     } else {
-        // Hash password
+      
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         try {
