@@ -1,5 +1,4 @@
 <?php
-// Start session only if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -8,29 +7,26 @@ require_once('../includes/config.php');
 require_once('../includes/functions.php');
 requireLogin();
 
-// Error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Rest of your existing booking.php code...
 ?>
 <?php
-//session_start();
 require_once('../includes/config.php');
 require_once('../includes/functions.php');
 requireLogin();
 
-// Enable error reporting
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Initialize variables
+
 $schedules = [];
 $error = '';
 
-// Database connection check
+
 try {
     $stmt = $pdo->query("
         SELECT 
@@ -53,11 +49,10 @@ try {
     die("Error: " . $e->getMessage());
 }
 
-// Handle booking form submission
-// In booking.php's POST handler
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_ticket'])) {
     try {
-        // Validate inputs
+
         $scheduleId = filter_var($_POST['schedule_id'], FILTER_VALIDATE_INT);
         $seatCount = filter_var($_POST['seat_count'], FILTER_VALIDATE_INT, [
             'options' => ['min_range' => 1]
@@ -69,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_ticket'])) {
 
         $pdo->beginTransaction();
 
-        // 1. Check Availability
         $stmt = $pdo->prepare("
             SELECT available_seats 
             FROM schedule 
@@ -83,7 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_ticket'])) {
             throw new Exception("Only $available seats remaining");
         }
 
-        // 2. Create Ticket
         $stmt = $pdo->prepare("
             INSERT INTO ticket (user_id, schedule_id, seat_count)
             VALUES (?, ?, ?)
@@ -92,7 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_ticket'])) {
             throw new Exception("Failed to create ticket");
         }
 
-        // 3. Update Seats
         $stmt = $pdo->prepare("
             UPDATE schedule 
             SET available_seats = available_seats - ? 
