@@ -4,17 +4,14 @@ require_once('../../includes/config.php');
 require_once('../../includes/functions.php');
 requireAdmin();
 
-// Get statistics for the admin dashboard
 try {
-    // Total users
+
     $userStmt = $pdo->query("SELECT COUNT(*) as total FROM user WHERE is_admin = 0");
     $totalUsers = $userStmt->fetch()['total'];
     
-    // Active tickets - Count the total seat_count for all booked tickets
     $activeStmt = $pdo->query("SELECT SUM(seat_count) as total FROM ticket WHERE status = 'booked' OR status IS NULL");
     $activeTickets = $activeStmt->fetch()['total'] ?? 0;
     
-    // Cancelled tickets - Count the total seat_count for all cancelled tickets
     $cancelledStmt = $pdo->query("SELECT SUM(seat_count) as total FROM ticket WHERE status = 'cancelled'");
     $cancelledTickets = $cancelledStmt->fetch()['total'] ?? 0;
     
