@@ -4,7 +4,6 @@ require_once('../includes/config.php');
 require_once('../includes/functions.php');
 requireLogin();
 
-// Fetch user's bookings
 try {
     $stmt = $pdo->prepare("
         SELECT t.*, s.departure_time, r.route_name,
