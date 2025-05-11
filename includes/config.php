@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
-$db   = 'transit'; // Make sure this matches your actual DB name
-$user = 'root';    // Default XAMPP user
-$pass = '';        // Default XAMPP password is empty
+$db   = 'transit'; 
+$user = 'root';    
+$pass = '';        
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
